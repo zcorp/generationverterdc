@@ -28,7 +28,7 @@ jobs:
         run: |
           mkdir -p dist/github-pages
           cp -R _next brand dist/github-pages/
-          cp -- *.html *.png *.ico robots.txt site.webmanifest .nojekyll dist/github-pages/
+          cp -- *.html *.png *.ico robots.txt site.webmanifest .nojekyll CNAME dist/github-pages/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
