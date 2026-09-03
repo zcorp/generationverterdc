@@ -1,4 +1,4 @@
-name: Deploy public site to GitHub Pages
+name: Deploy static site to GitHub Pages
 
 on:
   push:
@@ -15,30 +15,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
+      - name: Checkout static publication
         uses: actions/checkout@v4
 
-      - name: Build static public site
-        env:
-          DEPLOY_MODE: github-pages
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
-        run: ./scripts/build-static.sh
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p dist/github-pages
+          cp -R _next brand dist/github-pages/
+          cp -- *.html *.png *.ico robots.txt site.webmanifest .nojekyll dist/github-pages/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist/github-pages
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
