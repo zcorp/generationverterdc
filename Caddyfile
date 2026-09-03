@@ -1,0 +1,11 @@
+:80 {
+	reverse_proxy app:3000
+}
+
+# En production, remplacer le bloc ci-dessus par :
+#
+# generationverterdc.fr {
+# 	reverse_proxy app:3000
+# }
+#
+# Caddy gère alors automatiquement le certificat HTTPS.
